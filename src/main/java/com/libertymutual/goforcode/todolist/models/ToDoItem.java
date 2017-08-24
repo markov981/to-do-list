@@ -18,12 +18,11 @@ public class ToDoItem {
 
     
     public boolean isComplete() 				{ return isComplete;}  
-    public void setComplete(boolean isComplete) {this.isComplete = isComplete;}
-    public boolean getIsIncomplete() 			{return !isComplete;}
+    public void setComplete(boolean isComplete) { this.isComplete = isComplete;}
+    public boolean getIsIncomplete() 			{ return !isComplete;}
 
     @Override
-    public String toString() {
-        return text + "<" + id + "> (complete: " + isComplete + ")";
+    public String toString() { return text + "<" + id + "> (complete: " + isComplete + ")";
     }
 
 }

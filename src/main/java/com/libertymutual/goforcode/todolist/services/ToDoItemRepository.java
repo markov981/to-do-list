@@ -41,9 +41,6 @@ public class ToDoItemRepository {
 	    	Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(fr);    	
 	    	for (CSVRecord itrt : records) 
 	    	{	
-	    			String temp = String.valueOf(itrt.get(0)) + ", " + String.valueOf(itrt.get(1)) + ", " + String.valueOf(itrt.get(2));
-	    		    System.out.println("getAll() method, iterator value: " + temp);
-	    	   
 	    	    ToDoItem toDoIt = new ToDoItem();
 	    		    	
 	    		toDoIt.setId(Integer.valueOf(itrt.get(0)));                  
@@ -89,8 +86,6 @@ public class ToDoItemRepository {
      * @throws IOException 
      */
     public ToDoItem getById(int id) throws IOException {
-  	
-		 ToDoItem item = new ToDoItem();
 		 
     	/* CSVParser:
 		    - Parses CSV files per specified format 
@@ -99,7 +94,9 @@ public class ToDoItemRepository {
 		    - What we use is 'parse(String, CSVFormat)'
 	    
 	       CSVRecord
-	         - get(int i) returns a record value by its index     */	    	
+	         - get(int i) returns a record value by its index     */
+    	
+		    ToDoItem item = new ToDoItem();
 	    	FileReader fr = new FileReader(FileName); 	    		    	
 		    Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(fr);    	
 		    	
@@ -107,17 +104,16 @@ public class ToDoItemRepository {
 		    	  
 	    		  if(id == Integer.valueOf(itrt.get(0)))  
 	    		  {
+	    			  item.setId(id);
 	    			  item.setText(itrt.get(1));
-	    			  item.setComplete(true);}
+	    			  item.setComplete(Boolean.getBoolean(itrt.get(2)));
 	    	      } 
-		      
+		      }
     	 return item;
     }
 
 
-    
-    
-    
+      
     /**
      * Updates the given to-do item in the file.
      * @param item The item to update.
@@ -125,20 +121,32 @@ public class ToDoItemRepository {
      */
     public void update(ToDoItem item) throws IOException {
 
-    	   	
+    	// 1. Update the state: true/false
+	    List<ToDoItem> arr = new ArrayList<ToDoItem>();
+	    arr = getAll();
+        
+        for (ToDoItem itrt : arr) {	    	  
+    		  if(item.getId() == itrt.getId()) 
+    		  { 
+    			  item.setComplete(item.isComplete()); 
+    			  break;
+    		  }   			  
+	    }
+	    
+	    
+	    // 2. Write it all back, overwriting	    
 		FileWriter wrt = new FileWriter(FileName);		
         CSVPrinter printer = CSVFormat.DEFAULT.print(wrt);
-
-    	item.setId(nextId);       
-    	nextId += 1;
-    	
-        String[] arr = new String[3];
-	        arr[0] = String.valueOf(item.getId());
-	        arr[1] = item.getText();
-	        arr[2] = String.valueOf(item.isComplete());
-	    	      
-		printer.printRecord(arr);   	
-		printer.close();           
+        
+        for (ToDoItem itrt : arr) {
+          String[] tempArr = new String[3];
+	        tempArr[0] = String.valueOf(itrt.getId());
+	        tempArr[1] = itrt.getText();
+	        tempArr[2] = String.valueOf(itrt.isComplete());  
+		    
+		  printer.printRecord(tempArr); 			
+        }
+        //arr.clear();        // ??????
+        printer.close();    // ??????
     }
-
 }
