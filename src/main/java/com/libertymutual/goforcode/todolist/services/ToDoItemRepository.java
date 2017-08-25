@@ -33,6 +33,7 @@ public class ToDoItemRepository {
      * @return A list of the items. If no items exist, returns an empty list.
      */
     public List<ToDoItem> getAll() throws FileNotFoundException, IOException {
+
     	
     	List<ToDoItem> arr = new ArrayList<ToDoItem>();    	
     	
@@ -45,9 +46,9 @@ public class ToDoItemRepository {
 	    		    	
 	    		toDoIt.setId(Integer.valueOf(itrt.get(0)));                  
 	    		toDoIt.setText(itrt.get(1));                                             
-	    		toDoIt.setComplete(Boolean.getBoolean(itrt.get(2)));
+	    		toDoIt.setComplete(Boolean.parseBoolean(itrt.get(2)));  // Update
 	    		
-	    	    arr.add(toDoIt);	    	   
+	    	    arr.add(toDoIt);
     	    }   	
     	}
         return arr;  
@@ -106,7 +107,8 @@ public class ToDoItemRepository {
 	    		  {
 	    			  item.setId(id);
 	    			  item.setText(itrt.get(1));
-	    			  item.setComplete(Boolean.getBoolean(itrt.get(2)));
+	    			  item.setComplete(Boolean.parseBoolean(itrt.get(2))); 	    // Update			  
+	    			  break;
 	    	      } 
 		      }
     	 return item;
@@ -128,7 +130,7 @@ public class ToDoItemRepository {
         for (ToDoItem itrt : arr) {	    	  
     		  if(item.getId() == itrt.getId()) 
     		  { 
-    			  item.setComplete(item.isComplete()); 
+    			  		itrt.setComplete(item.isComplete());  // Update
     			  break;
     		  }   			  
 	    }
@@ -142,11 +144,9 @@ public class ToDoItemRepository {
           String[] tempArr = new String[3];
 	        tempArr[0] = String.valueOf(itrt.getId());
 	        tempArr[1] = itrt.getText();
-	        tempArr[2] = String.valueOf(itrt.isComplete());  
-		    
+	        tempArr[2] = String.valueOf(itrt.isComplete());  	        		
 		  printer.printRecord(tempArr); 			
         }
-        //arr.clear();        // ??????
-        printer.close();    // ??????
+        printer.close();    
     }
 }
